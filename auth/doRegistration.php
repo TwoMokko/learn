@@ -1,19 +1,15 @@
-<?php ob_start(); ?>
-	<div>
-		<div style = "display: flex">
-			<div><strong>Ваше имя:</strong></div>
-			<div><?= $_POST['login']; ?></div>
-		</div>
-		<div style = "display: flex">
-			<div><strong>Ваш пароль:</strong></div>
-			<div><?= $_POST['pass']; ?></div>
-		</div>
-		<div style = "display: flex">
-			<div><strong>Ваш повторный пароль:</strong></div>
-			<div><?= $_POST['repass']; ?></div>
-		</div>
-	</div>
 <?php
-$content = ob_get_contents();
-ob_end_clean();
-require '../layout/main.php';
+//	if (User::checkAuth()) \Base\Response::sendError();
+
+	$login = $_POST['login'];
+	$pass = $_POST['pass'];
+	$repass = $_POST['repass'];
+	$remember = isset($_POST['remember']);
+
+    if (User::issetUserByLogin($login)) \Base\Response::sendError('такой пользователь уже существует');
+    if (($validPass = User::validationPassword($pass, $repass)) < 0) \Base\Response::sendError(User::TEXT_ERRORS[$validPass]);
+
+    $userData = User::createUser($login, $pass);
+
+    User::logIn($userData['login'], $userData['token'], $remember);
+    \Base\Response::sendOk();

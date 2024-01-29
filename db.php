@@ -21,4 +21,15 @@
             }
             return null;
         }
+
+        public static function createUser(string $login, string $pass, string $token): void {
+
+        }
+
+        public static function issetUserByLogin(string $login): bool {
+            foreach (self::$users as $user) {
+                if ($user['login'] === $login) return true;
+            }
+            return false;
+        }
     }

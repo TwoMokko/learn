@@ -1,6 +1,15 @@
 <?php
 
     class User {
+        const VALIDATION_OK = 1;
+        const VALIDATION_ERROR_LENGTH = - 1;
+        const VALIDATION_ERROR_REPASS = - 2;
+
+        const TEXT_ERRORS = [
+            self::VALIDATION_ERROR_LENGTH => 'слишком короткий пароль',
+            self::VALIDATION_ERROR_REPASS => 'пароли не совпадают'
+        ];
+
         static private bool $auth = false;
         static private string $login = '';
         static private string $token = '';
@@ -54,5 +63,35 @@
             $_SESSION['user']['auth'] = true;
             $_SESSION['user']['login'] = $user['login'];
             return true;
+        }
+
+        static public function issetUserByLogin($login): bool {
+            return DB::issetUserByLogin($login);
+        }
+
+        static public function validationPassword(string $pass, string $repass): int {
+            if (mb_strlen($pass) < 8) return self::VALIDATION_ERROR_LENGTH;
+            if ($pass !== $repass) return self::VALIDATION_ERROR_REPASS;
+            return self::VALIDATION_OK;
+        }
+
+        static public function createUser(string $login, string $pass): array {
+            $token = self::generateToken();
+            DB::createUser($login, $pass, $token);
+            return [
+                'login' => $login,
+                'token' => $token,
+            ];
+        }
+
+        static private function generateToken(): string {
+            $count = rand(8, 16);
+            $specialSymbols = '0123456789qwertyuiopasdfghjklzxcvbnm!@#$%^&*U()_-=+';
+            $countSymbols = mb_strlen($specialSymbols) - 1;
+            for ($i = 1, $str = ''; $i < $count; $i++) {
+                $position = rand(0, $countSymbols);
+                $str .= $specialSymbols[$position];
+            }
+            return hash('sha256', $str);
         }
     }

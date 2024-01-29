@@ -1,8 +1,5 @@
 <?php
-
-    if (User::checkAuth()) \Base\Response::sendError();
-
-
+//    if (User::checkAuth()) \Base\Response::sendError();
 
 	$login = $_POST['login'];
 	$pass = $_POST['pass'];

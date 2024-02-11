@@ -75,9 +75,9 @@
             return self::VALIDATION_OK;
         }
 
-        static public function createUser(string $login, string $pass): array {
+        static public function createUser(string $login, string $pass): array|false {
             $token = self::generateToken();
-            DB::createUser($login, $pass, $token);
+            if (!DB::createUser($login, $pass, $token)) return false;
             return [
                 'login' => $login,
                 'token' => $token,

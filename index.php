@@ -15,6 +15,7 @@
     require DIR_BASE . 'response.php';
     require DIR_ROOT . 'db.php';
 
+    DB::connect();
     User::init();
 
 

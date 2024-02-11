@@ -7,6 +7,35 @@
             ['id' => 4, 'login' => 'qwerty4', 'password' => 'pass4', 'name' => 'Vova', 'old' => 23, 'token' => '09beafdacbaae6543f8dcfe4c5c36ce0229daf1460f34fe9ec2ff5cbf07e2110'],
             ['id' => 5, 'login' => 'qwerty5', 'password' => 'pass5', 'name' => 'Ira', 'old' => 23, 'token' => '449d2dd071039ffbf33f12f7b8900bf5709f60bee60eea06a9d3a1d12e641bdd'],
         ];
+        private static mysqli|bool $db;
+        private static array $history;
+
+        public static function connect(): void {
+            self::$db = mysqli_connect('localhost', 'root', '', 'learn');
+            if (!self::$db) die('data base error');
+        }
+
+        public static function getHistory(): array {
+            return self::$history;
+        }
+
+        public static function getLastQuery(): string {
+            return self::$history[count(self::$history) - 1];
+        }
+
+        public static function showLastQuery(): void {
+            echo self::getLastQuery();
+        }
+
+        public static function showLastQueryAndDie(): void {
+            self::showLastQuery();
+            die;
+        }
+
+        public static function query(string $sql): bool|mysqli_result {
+            self::$history[] = $sql;
+            return mysqli_query(self::$db, $sql);
+        }
 
         public static function getUserByLoginAndPass(string $login, string $pass): ?array {
             foreach (self::$users as $user) {
@@ -22,8 +51,12 @@
             return null;
         }
 
-        public static function createUser(string $login, string $pass, string $token): void {
+        public static function createUser(string $login, string $pass, string $token): bool {
+            $login = mysqli_real_escape_string(self::$db, $login);
+            $pass = mysqli_real_escape_string(self::$db, $pass);
+            $token = mysqli_real_escape_string(self::$db, $token);
 
+            return self::query("INSERT INTO `users` (`login`, `password`, `token`) VALUES ('{$login}', '{$pass}','{$token}')");
         }
 
         public static function issetUserByLogin(string $login): bool {

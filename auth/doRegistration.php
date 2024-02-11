@@ -9,7 +9,7 @@
     if (User::issetUserByLogin($login)) \Base\Response::sendError('такой пользователь уже существует');
     if (($validPass = User::validationPassword($pass, $repass)) < 0) \Base\Response::sendError(User::TEXT_ERRORS[$validPass]);
 
-    $userData = User::createUser($login, $pass);
+    if (!($userData = User::createUser($login, $pass))) \Base\Response::sendError('ошибка базы данных');
 
     User::logIn($userData['login'], $userData['token'], $remember);
     \Base\Response::sendOk();

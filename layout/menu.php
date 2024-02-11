@@ -5,7 +5,7 @@
 		<div><a style="padding: 8px" href="/about">О нас</a></div>
 		<div><a style="padding: 8px" href="/contact">Контакты</a></div>
 		<?php if (User::checkAuth()) { ?>
-			<div><a style="padding: 8px" href="/user">Профиль</a></div>
+			<div><a style="padding: 8px" href="/profile">Профиль</a></div>
 			<div><a style="padding: 8px" href="/do_logout">Выйти</a></div>
 		<?php } else { ?>
 			<div><a style="padding: 8px" href="/registration">Регистрация</a></div>

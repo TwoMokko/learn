@@ -16,9 +16,9 @@
                 case 'profile': self::onlyLoginHTML(DIR_PAGES . 'profile.php'); return;
                 case 'login': self::onlyUnLoginHTML(DIR_PAGES . 'login.php'); return;
                 case 'registration': self::onlyUnLoginHTML(DIR_PAGES . 'registration.php'); return;
-                case 'do_login': self::onlyUnLoginXHR(DIR_ROOT . 'auth/doLogin.php'); return;
-                case 'do_registration': self::onlyUnLoginXHR(DIR_ROOT . 'auth/doRegistration.php'); return;
-                case 'do_logout': self::onlyLoginXHR(DIR_ROOT . 'auth/doLogout.php'); return;
+                case 'do_login': self::onlyUnLoginXHR(\User::class, 'doLogin'); return;
+                case 'do_registration': self::onlyUnLoginXHR(\User::class, 'doRegistration'); return;
+                case 'do_logout': self::onlyLoginXHR(\User::class,'doLogout'); return;
                 case '404': require DIR_PAGES . '404.php'; return;
                 default: require DIR_PAGES . '404.php';
             }
@@ -34,13 +34,13 @@
             require $path;
         }
 
-        static private function onlyUnLoginXHR(string $path, string $errorMessage = 'вы уже вошли'): void {
+        static private function onlyUnLoginXHR(string $class, string $method, string $errorMessage = 'вы уже вошли'): void {
             if (\User::checkAuth()) Response::sendError($errorMessage);
-            require $path;
+            forward_static_call_array([$class, $method], []);
         }
 
-        static private function onlyLoginXHR(string $path, string $errorMessage = 'войдите, чтобы продолжить'): void {
+        static private function onlyLoginXHR(string $class, string $method, string $errorMessage = 'войдите, чтобы продолжить'): void {
             if (!\User::checkAuth()) Response::sendError($errorMessage);
-            require $path;
+            forward_static_call_array([$class, $method], []);
         }
     }

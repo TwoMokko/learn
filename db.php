@@ -38,17 +38,19 @@
         }
 
         public static function getUserByLoginAndPass(string $login, string $pass): ?array {
-            foreach (self::$users as $user) {
-                if ($user['login'] === $login && $user['password'] === $pass) return $user;
-            }
-            return null;
+            $login = mysqli_real_escape_string(self::$db, $login);
+            $pass = mysqli_real_escape_string(self::$db, $pass);
+            $result = self::query("SELECT `login`, `token` FROM `users` WHERE `login` = '{$login}' AND `password` = '{$pass}'");
+
+            return mysqli_fetch_assoc($result);
         }
 
         public static function getUserByLoginAndToken(string $login, string $token): ?array {
-            foreach (self::$users as $user) {
-                if ($user['login'] === $login && $user['token'] === $token) return $user;
-            }
-            return null;
+            $login = mysqli_real_escape_string(self::$db, $login);
+            $token = mysqli_real_escape_string(self::$db, $token);
+            $result = self::query("SELECT `login` FROM `users` WHERE `login` = '{$login}' AND `token` = '{$token}'");
+
+            return mysqli_fetch_assoc($result);
         }
 
         public static function createUser(string $login, string $pass, string $token): bool {
@@ -60,9 +62,9 @@
         }
 
         public static function issetUserByLogin(string $login): bool {
-            foreach (self::$users as $user) {
-                if ($user['login'] === $login) return true;
-            }
-            return false;
+            $login = mysqli_real_escape_string(self::$db, $login);
+            $result = self::query("SELECT `login` FROM `users` WHERE `login` = '{$login}'");
+
+            return (bool)mysqli_fetch_assoc($result);
         }
     }

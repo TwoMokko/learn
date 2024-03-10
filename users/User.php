@@ -1,6 +1,8 @@
 <?php
 
-    class User {
+use JetBrains\PhpStorm\NoReturn;
+
+class User {
         const VALIDATION_OK = 1;
         const VALIDATION_ERROR_LENGTH = - 1;
         const VALIDATION_ERROR_REPASS = - 2;
@@ -94,4 +96,39 @@
             }
             return hash('sha256', $str);
         }
+
+        #[NoReturn] static public function doLogin(): void {
+            $login = $_POST['login'];
+            $pass = $_POST['pass'];
+            $remember = isset($_POST['remember']);
+
+            if ($user = DB::getUserByLoginAndPass($login, $pass)) {
+                self::logIn($user['login'], $user['token'], $remember);
+                \Base\Response::sendOk();
+            }
+
+            \Base\Response::sendError('пользователь не найден');
+        }
+
+        #[NoReturn] static public function doRegistration(): void {
+            $login = $_POST['login'];
+            $pass = $_POST['pass'];
+            $repass = $_POST['repass'];
+            $remember = isset($_POST['remember']);
+
+            if (self::issetUserByLogin($login)) \Base\Response::sendError('такой пользователь уже существует');
+            if (($validPass = self::validationPassword($pass, $repass)) < 0) \Base\Response::sendError(self::TEXT_ERRORS[$validPass]);
+
+            if (!($userData = self::createUser($login, $pass))) \Base\Response::sendError('ошибка базы данных');
+
+            self::logIn($userData['login'], $userData['token'], $remember);
+            \Base\Response::sendOk();
+        }
+
+        #[NoReturn] static public function doLogout(): void {
+            self::logOut();
+            redirect();
+        }
+
     }
+

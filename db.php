@@ -11,7 +11,7 @@
         private static array $history;
 
         public static function connect(): void {
-            self::$db = mysqli_connect('localhost', 'root', '', 'learn');
+            self::$db = mysqli_connect('localhost', 'root', '', 'notice');
             if (!self::$db) die('data base error');
         }
 
@@ -37,10 +37,9 @@
             return mysqli_query(self::$db, $sql);
         }
 
-        public static function getUserByLoginAndPass(string $login, string $pass): ?array {
+        public static function getUserByLogin(string $login): ?array {
             $login = mysqli_real_escape_string(self::$db, $login);
-            $pass = mysqli_real_escape_string(self::$db, $pass);
-            $result = self::query("SELECT `login`, `token` FROM `users` WHERE `login` = '{$login}' AND `password` = '{$pass}'");
+            $result = self::query("SELECT `login`, `password`, `salt`, `token` FROM `users` WHERE `login` = '{$login}'");
 
             return mysqli_fetch_assoc($result);
         }
@@ -53,12 +52,12 @@
             return mysqli_fetch_assoc($result);
         }
 
-        public static function createUser(string $login, string $pass, string $token): bool {
+        public static function createUser(string $login, string $pass, string $salt, string $token): bool {
             $login = mysqli_real_escape_string(self::$db, $login);
             $pass = mysqli_real_escape_string(self::$db, $pass);
             $token = mysqli_real_escape_string(self::$db, $token);
 
-            return self::query("INSERT INTO `users` (`login`, `password`, `token`) VALUES ('{$login}', '{$pass}','{$token}')");
+            return self::query("INSERT INTO `users` (`login`, `password`, `salt`, `token`) VALUES ('{$login}', '{$pass}', '{$salt}','{$token}')");
         }
 
         public static function issetUserByLogin(string $login): bool {

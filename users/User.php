@@ -12,6 +12,8 @@ class User {
             self::VALIDATION_ERROR_REPASS => 'пароли не совпадают'
         ];
 
+        const SALT_LOCAL = '9e7224f5c6';
+
         static private bool $auth = false;
         static private string $login = '';
         static private string $token = '';
@@ -79,7 +81,8 @@ class User {
 
         static public function createUser(string $login, string $pass): array|false {
             $token = self::generateToken();
-            if (!DB::createUser($login, $pass, $token)) return false;
+            [$encryptionPass, $salt] = self::encryptionPassword($pass);
+            if (!DB::createUser($login, $encryptionPass, $salt, $token)) return false;
             return [
                 'login' => $login,
                 'token' => $token,
@@ -97,17 +100,27 @@ class User {
             return hash('sha256', $str);
         }
 
+        static private function encryptionPassword(string $pass): array {
+            $saltUser = bin2hex(random_bytes(rand(3, 5)));
+            $str = $pass . $saltUser . self::SALT_LOCAL;
+
+            return [hash('sha256', $str), $saltUser];
+        }
+
+        static private function comparePassword(string $pass, string $userPass, string $userSalt): bool {
+            return hash('sha256', $pass . $userSalt . self::SALT_LOCAL) === $userPass;
+        }
+
         #[NoReturn] static public function doLogin(): void {
             $login = $_POST['login'];
             $pass = $_POST['pass'];
             $remember = isset($_POST['remember']);
 
-            if ($user = DB::getUserByLoginAndPass($login, $pass)) {
-                self::logIn($user['login'], $user['token'], $remember);
-                \Base\Response::sendOk();
-            }
+            if (!$user = DB::getUserByLogin($login)) \Base\Response::sendError('пользователь не найден');
+            if (!self::comparePassword($pass, $user['password'], $user['salt'])) \Base\Response::sendError('пароль введен неверно');
 
-            \Base\Response::sendError('пользователь не найден');
+            self::logIn($user['login'], $user['token'], $remember);
+            \Base\Response::sendOk();
         }
 
         #[NoReturn] static public function doRegistration(): void {

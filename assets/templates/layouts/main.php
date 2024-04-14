@@ -10,10 +10,10 @@ require 'menu.php';
 	<meta http-equiv = "X-UA-Compatible" content = "ie=edge">
 	<title>Learn</title>
 	<script src="https://yastatic.net/jquery/3.3.1/jquery.min.js"></script>
-	<script src="js/request.js"></script>
+	<script src="../js/request.js"></script>
 </head>
 <body>
-    <header><?= \Base\Layout::$menu ?></header>
-    <main><?= \Base\Layout::$content ?></main>
+    <header><?= \assets\templates\sections\Section::$menu ?></header>
+    <main><?= \assets\templates\sections\Section::$content ?></main>
 </body>
 </html>

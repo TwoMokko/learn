@@ -2,7 +2,7 @@
 //	require '../functions.php';
 	ob_start(); ?>
 		<div>
-			<form action = "/do_registration" method = "post">
+			<form action = "../../../../index.php" method = "post">
 				<input type = "text" name = "login" placeholder = "введите имя"/>
 				<input type = "password" name = "pass" placeholder = "введите пароль"/>
 				<input type = "password" name = "repass" placeholder = "повторите пароль"/>
@@ -11,6 +11,6 @@
 			</form>
 		</div>
 <?php
-	\Base\Layout::$content = ob_get_contents();
+	\assets\templates\sections\Section::$content = ob_get_contents();
 	ob_end_clean();
-//	require '../layout/main.php';
+//	require '../layouts/main.php';

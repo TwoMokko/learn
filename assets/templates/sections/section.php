@@ -1,8 +1,8 @@
 <?php
 
-    namespace Base;
+    namespace assets\templates\sections;
 
-    abstract class Layout {
+    abstract class Section {
         static public string $menu;
         static public string $content;
     }

@@ -3,6 +3,6 @@
 	ob_start(); ?>
 		<div>Главная</div>
 <?php
-	\Base\Layout::$content = ob_get_contents();
+	\assets\templates\sections\Section::$content = ob_get_contents();
 	ob_end_clean();
-//	require 'layout/main.php';
+//	require 'layouts/main.php';

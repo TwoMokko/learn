@@ -1,5 +1,5 @@
 <?php
-require 'menu.php';
+//require 'menu.php';
 ?>
 <!doctype html>
 <html lang = "ru">
@@ -13,7 +13,7 @@ require 'menu.php';
 	<script src="../js/request.js"></script>
 </head>
 <body>
-    <header><?= \assets\templates\sections\Section::$menu ?></header>
-    <main><?= \assets\templates\sections\Section::$content ?></main>
+    <header><?php Core\Section::show('header') ?></header>
+    <main><?php Core\Section::show('content'); ?></main>
 </body>
 </html>

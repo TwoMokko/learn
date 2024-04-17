@@ -16,5 +16,5 @@ ob_start(); ?>
 		<?php } ?>
 	</div>
 <?php
-	\assets\templates\sections\Section::$menu = ob_get_contents();
+	\Section::$menu = ob_get_contents();
 	ob_end_clean();

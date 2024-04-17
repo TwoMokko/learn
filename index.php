@@ -17,6 +17,8 @@
     require DIR_CORE . 'controller.php';
     require DIR_CORE . 'router.php';
     require DIR_CORE . 'response.php';
+    require DIR_CORE . 'section.php';
+    require DIR_CORE . 'template.php';
 
     require DIR_ASSETS . 'functions.php';
 

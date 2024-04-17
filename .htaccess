@@ -9,17 +9,18 @@
     RewriteRule ^404\.php$ 404.php [QSA,NC,L]
 
     RewriteCond %{REQUEST_FILENAME} -f
-    RewriteRule ^(.*)\.(htaccess|php)$ index.php?page=404 [QSA,NC,L]
+    RewriteRule ^(.*)\.(htaccess|php)$ index.php?controller=error [QSA,NC,L]
 
 	RewriteCond %{REQUEST_FILENAME} !-f
 	RewriteCond %{REQUEST_FILENAME} !-d
-	RewriteRule ^([0-9a-z-_]+)/?$ index.php?page=$1 [QSA,NC,L]
+	RewriteRule ^([0-9a-z-_]+)/?$ index.php?controller=$1 [QSA,NC,L]
+
+	RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^([0-9a-z-_]+)/([0-9a-z-_]+)/?$ index.php?controller=$1&method=$2 [QSA,NC,L]
 
     RewriteRule ^(.*)\.(css|js)$ $1.$2 [NC,L]
 
 	RewriteRule ^(.*)$ index.php [QSA,NC,L]
 
-#	RewriteCond %{REQUEST_FILENAME} !-f
-#	RewriteCond %{REQUEST_FILENAME} !-d
-#	RewriteRule ^([0-9a-z-_]+)/([0-9a-z-_]+)/?$ site.php?__a=$1&__p=$2 [QSA,NC,L]
 </IfModule>

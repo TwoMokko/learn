@@ -1,5 +1,5 @@
 <?php
-//require 'menu.php';
+//require 'menu.tpl';
 ?>
 <!doctype html>
 <html lang = "ru">

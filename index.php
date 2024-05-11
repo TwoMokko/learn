@@ -13,16 +13,18 @@
 
     session_start();
 
-    require DIR_CORE . 'functions.php';
-    require DIR_CORE . 'controller.php';
-    require DIR_CORE . 'router.php';
-    require DIR_CORE . 'response.php';
-    require DIR_CORE . 'section.php';
-    require DIR_CORE . 'template.php';
+    require_once DIR_CORE . 'functions.php';
+    require_once DIR_CORE . 'controller.php';
+    require_once DIR_CORE . 'router.php';
+    require_once DIR_CORE . 'response.php';
+    require_once DIR_CORE . 'section.php';
+    require_once DIR_CORE . 'template.php';
+    require_once DIR_CORE . 'buffer.php';
+    require_once DIR_CORE . 'view.php';
 
-    require DIR_ASSETS . 'functions.php';
+    require_once DIR_ASSETS . 'functions.php';
 
-    require DIR_ROOT . 'db.php';
+    require_once DIR_ROOT . 'db.php';
 
     DB::connect();
 

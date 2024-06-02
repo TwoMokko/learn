@@ -21,6 +21,8 @@
     require_once DIR_CORE . 'template.php';
     require_once DIR_CORE . 'buffer.php';
     require_once DIR_CORE . 'view.php';
+    require_once DIR_CORE . 'model.php';
+    require_once DIR_CORE . 'modelStorage.php';
 
     require_once DIR_ASSETS . 'functions.php';
 

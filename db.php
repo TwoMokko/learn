@@ -4,7 +4,7 @@
         private static array $history;
 
         public static function connect(): void {
-            self::$db = mysqli_connect('localhost', 'root', '', 'notice');
+            self::$db = mysqli_connect('MySQL-8.0', 'root', '', 'notice');
             if (!self::$db) die('data base error');
         }
 

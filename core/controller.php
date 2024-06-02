@@ -18,8 +18,8 @@
         }
 
         static private function extract(string $controller, string $method): void {
-            $controllerPath = '\Controller\\' .$controller;
-            $controller = new $controllerPath();
-            call_user_func([$controller, $method]);
+            $controllerPath = '\Controller\\' . $controller;
+            $classController = new $controllerPath();
+            call_user_func([$classController, $method]);
         }
     }
